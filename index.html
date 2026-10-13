@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost Maze - เขาวงกตหนีผี</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- Loading -->
+<div id="loading" class="screen">
+  <h1 class="title">👻 เขาวงกตหนีผี</h1>
+  <p id="loadText">กำลังโหลดตัวละคร...</p>
+  <div class="bar"><div id="loadBar"></div></div>
+</div>
+
+<!-- Character select -->
+<div id="menu" class="screen hidden">
+  <h1 class="title">👻 เขาวงกตหนีผี</h1>
+  <p class="sub">เลือกฮีโร่ของคุณ เก็บกุญแจ 3 ดอก แล้วหนีออกจากเขาวงกต!</p>
+  <div class="select">
+    <canvas id="preview" width="420" height="420"></canvas>
+    <div class="side">
+      <div id="cards"></div>
+      <div id="charInfo"></div>
+      <button id="startBtn" class="btn big">เล่นคนเดียว ▶</button>
+      <button id="mpBtn" class="btn big alt">👥 เล่นกับเพื่อน (สุ่มว่าใครเป็นผี)</button>
+    </div>
+  </div>
+  <div class="help">
+    <b>WASD</b> เดิน · <b>เมาส์</b> หมุนกล้อง (คลิกจอเพื่อล็อกเมาส์) · <b>คลิกซ้าย / J</b> โจมตี ·
+    <b>คลิกขวา / K</b> ท่าพิเศษ · <b>Shift</b> พุ่งหลบ · <b>← →</b> หมุนกล้อง · <b>P / Esc</b> หยุดเกม
+  </div>
+</div>
+
+<!-- Multiplayer lobby -->
+<div id="lobby" class="screen hidden">
+  <h1 class="title">👥 เล่นกับเพื่อน</h1>
+  <div class="lobbybox">
+    <div id="joinForm" class="row">
+      <input id="nameInput" maxlength="16" placeholder="ชื่อของคุณ">
+      <button id="joinBtn" class="btn">เข้าห้อง</button>
+    </div>
+    <div id="lobbyMain" class="hidden">
+      <div class="lobbysec">
+        <div class="lbl">ตัวละครของคุณ (ใช้ตอนเป็นผู้หนี)</div>
+        <div id="lobbyChars" class="row"></div>
+      </div>
+      <div class="lobbysec">
+        <div class="lbl">ผู้เล่นในห้อง</div>
+        <div id="playerList"></div>
+      </div>
+      <div id="shareBox" class="lobbysec share"></div>
+      <div id="hostBox" class="lobbysec">
+        <div class="row">
+          <span>จำนวนผี</span>
+          <select id="ghostCount"></select>
+        </div>
+        <button id="mpStartBtn" class="btn big">🎲 สุ่มบทบาท แล้วเริ่มเกม!</button>
+      </div>
+      <div id="waitBox" class="lobbysec wait"></div>
+    </div>
+    <div id="lobbyErr" class="err"></div>
+    <button id="lobbyBack" class="btn alt">← กลับเมนู</button>
+  </div>
+  <div class="help">
+    ผู้หนี 🏃: ช่วยกันเก็บกุญแจ 3 ดอก แล้วให้ใครสักคนหนีออกประตูมิติ · ต่อสู้ได้ ตีผีจนหมดแรงจะโดนขับไล่ 4 วินาที<br>
+    ผี 👻: ไล่จับผู้หนี (ชนแล้วโดน) · <b>คลิกซ้าย/J</b> พุ่งจับ · <b>คลิกขวา/K</b> ทะลุกำแพง · ผู้หนีที่โดนจับจะกลายเป็นผี!<br>
+    ผีชนะถ้าจับครบทุกคน หรือหมดเวลา 5 นาที
+  </div>
+</div>
+
+<!-- Role roulette -->
+<div id="roulette" class="screen hidden">
+  <h1 id="rouTitle" class="title">🎲 กำลังสุ่ม...</h1>
+  <div id="rouCards"></div>
+  <div id="rouYou"></div>
+</div>
+
+<!-- HUD -->
+<div id="hud" class="hidden">
+  <div class="panel tl">
+    <div id="hudName"></div>
+    <div class="hpwrap"><div id="hpBar"></div><span id="hpText"></span></div>
+    <div class="spwrap"><div id="spBar"></div><span id="spText"></span></div>
+    <div id="mpStats" class="stats hidden"></div>
+    <div id="soloStats" class="stats">ด่าน <b id="hudLevel">1</b> · 🗝️ <b id="hudKeys">0/3</b> · 👻 <b id="hudKills">0</b></div>
+  </div>
+  <canvas id="minimap" width="190" height="190"></canvas>
+  <div id="msg"></div>
+  <div id="crosshair"></div>
+  <div id="hurt"></div>
+</div>
+<div id="floaters"></div>
+
+<!-- Overlay (pause / game over / level clear) -->
+<div id="overlay" class="screen hidden">
+  <h1 id="ovTitle"></h1>
+  <p id="ovText"></p>
+  <div id="ovBtns"></div>
+</div>
+
+<script type="module" src="game.js"></script>
+</body>
+</html>
